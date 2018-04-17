@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=z, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>loading</title>
+</head>
+<body>
+    <div>
+        <h1>loading</h1>
+        <canvas width="600" height="300" id="cv"></canvas>
+    </div>
+</body>
+<script>
+    // 最近逛到了一位大神叫"我仍旧在这里"写的每周一点canvas动画，感觉超级的棒啊，是时候对canvas重新学习一番了，这里边的加载动画和粒子文字效果真的非常不错的，感谢大神的贡献，学习了
+    window.onload=function(){
+        // 获取画布
+        var c=document.getElementById('cv');
+        // 指定画布环境
+        var ctx=c.getContext('2d');
+        // 画布中心点X轴坐标
+        var centerX=c.width/2;
+        // 画布中心点Y轴坐标
+        var centerY=c.height/2;
+        var rag=Math.PI*2/100;
+        // 加载速度
+        var speed=0.1;
+        // 绘制动态圈
+        function outArc(n){
+            // 保存当前画布环境
+            ctx.save();
+            // 设置笔触的颜色
+            ctx.strokeStyle = "#49f";
+            // 设置画笔宽度
+            ctx.lineWidth=10;
+            // 起始一条路径
+            ctx.beginPath();
+            // 开始画圆
+            ctx.arc(centerX,centerY,50,-Math.PI/2,-Math.PI/2+n*rag,false);
+            // 绘制当前定义的圆形
+            ctx.stroke();
+            // 恢复到上次绘画状态
+            ctx.restore();
+        }
+        // 绘制静态圈
+        function enterArc(){
+            ctx.save();
+            ctx.strokeStyle="#a5def1";
+            ctx.lineWidth=10;
+            ctx.beginPath();
+            ctx.arc(centerX,centerY,50,-Math.PI/2,Math.PI*2,false);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+        // 创建百分比
+        function rate(n){
+            ctx.save();
+            ctx.fillStyle="#ff00ff";
+            ctx.font="30px 微软雅黑";
+            ctx.textAlign="center";
+            ctx.textBaseline="middle";
+            ctx.fillText(n.toFixed(0)+'%',centerX,centerY);
+            ctx.restore()
+        }
+        //动画循环
+        (function drawFrame(){
+            if(!window.requestAnimationFrame){
+                window.requestAnimationFrame =(window.webkitRequestAnimationFrame||
+                                            window.mozRequestAnimationFrame||
+                                            window.oRequestAnimationFrame||
+                                            window.msRequestAnimationFrame||
+                                            function(callback){
+                                                return window.setTimeout(callback,1000/60); 
+                                            });
+                
+            }
+            window.requestAnimationFrame(drawFrame, c);
+            ctx.clearRect(0, 0, c.width, c.height);//清除上一次的绘画痕迹
+                
+            enterArc();;
+            rate(speed);
+            outArc(speed);
+                    
+            if(speed > 100) speed = 0;
+            speed += 0.1;
+        }());
+    }
+</script>
+</html>
