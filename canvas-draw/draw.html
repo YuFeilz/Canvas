@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas 黑客帝国</title>
+</head>
+<body>
+    <canvas id="cv"></canvas>
+</body>
+<script>
+    window.onload=function(){
+        // 获取画布
+        var c=document.getElementById('cv');
+        var ctx=c.getContext('2d');
+        var canvasw=c.width=window.innerWidth;
+        var canvasH=c.height=window.innerHeight;
+
+        // 初始化数据设置
+        var shadowColor='rgba(0,0,0,.1)';//渐变阴影
+        var wordCollor="#33ff33";//文字颜色
+        var words = "0123456789qwertyuiopasdfghjklzxcvbnm,./;'\[]QWERTYUIOP{}ASDFGHJHJKL:ZXCVBBNM<>?";
+        var wordArr=words.split('');//将文字转换成数组
+        var font_size=16;//文字大小
+        var clumns=canvasw/16;//文字排列的列数
+        var drops=[];
+        for(var i=0;i<wordArr.length;i++){
+            drops[i]=1; 
+        }
+
+        function draw(){
+            ctx.save();
+            ctx.fillStyle=wordCollor;
+            ctx.font=font_size+"px arial";
+            for (var i = 0; i < drops.length; i++){
+            var text = wordArr[Math.floor(Math.random() * wordArr.length)];
+                ctx.fillText(text, i * font_size, drops[i] * font_size);
+                if (drops[i] * font_size > canvasH && Math.random() > 0.98){
+                        drops[i] = 0;
+                }
+                drops[i]++;
+            }
+            ctx.restore();
+        }
+        (function drawFrame(){
+            if(!window.requestAnimationFrame){
+                window.requestAnimationFrame=(window.webkitRequestAnimationFrame||
+                                            window.mozRequestAnimationFrame||
+                                            window.oRequestAnimationFrame||
+                                            window.msRequestAnimationFrame||
+                                            function(callback){
+                                                return window.setTimeout(callback,1000/60); 
+                                            });
+            }
+            window.requestAnimationFrame(drawFrame, c);
+            ctx.fillStyle = shadowColor;
+            ctx.fillRect(0, 0, canvasw, canvasH); 
+            draw();
+        }())
+    }
+</script>
+</html>
