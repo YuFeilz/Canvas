@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>爱心</title>
+</head>
+<body>
+    <canvas id="loveTree"></canvas>
+</body>
+<script>
+    window.onload=function(){
+        var c=document.getElementById('loveTree');
+        var ctx=c.getContext('2d');
+        var colorArr=['#f4aaeb','#ffa54a','#ff0000','#d3abd2'];
+        c.width=window.innerWidth;
+        c.height=window.innerHeight;
+        var i=1;
+        function love(ctx,color,x,y){
+            ctx.save();
+            ctx.translate(x,y);
+            ctx.scale(15,15);
+            ctx.beginPath();
+            ctx.arc(-1,0,1,Math.PI,0,false);
+            ctx.arc(1,0,1,Math.PI,0,false);
+            ctx.bezierCurveTo(1.9, 1.2, 0.6, 1.6, 0, 3.0);
+            ctx.bezierCurveTo( -0.6, 1.6,-1.9, 1.2,-2,0);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.shadowColor = "#ffeaff";
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.restore();
+        }
+        var timer=setInterval(function(){
+            love(ctx,colorArr[Math.floor(Math.random()*colorArr.length)],Math.floor(Math.random()*1316),Math.floor(Math.random()*718));
+            i++; 
+            if(i>52){
+                clearInterval(timer);
+            }
+        },100);
+        
+    }
+</script>
+</html>
